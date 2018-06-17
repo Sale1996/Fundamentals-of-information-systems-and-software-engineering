@@ -1,0 +1,600 @@
+package admin.gui.previewWizard;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.apache.commons.io.FileUtils;
+
+import admin.gui.glavniProzor.PocetniProzor;
+import model.Parametar;
+import model.Proizvod;
+import model.Wizard;
+
+
+public class GenerickiWizard extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -796824979960120090L;
+	private JPanel panel1;
+	private JPanel panBottom;
+	private Boolean izvrsni;
+	private JFileChooser browse;
+	private JTextField txtValue;
+	private FileNameExtensionFilter filter;
+	private JLabel imgLabel;
+	private Image slika_smanjena;
+	private String put;
+	private JCheckBox istina;
+	private JCheckBox pogresno;
+	private File f;
+	private JTextArea multiLineText;
+	private JTextField oneLineText;
+	private JScrollPane a;
+	int brojWizardaIzListe=0;
+	private Proizvod proizvod;
+	private List<Wizard> listaWizarda;
+	private GenerickiWizard gw;
+	private Boolean izvorisni1;
+	private File odredisniDirektorijum;
+	
+	public GenerickiWizard(Boolean izvrsni1,File odredisniDirekt) { 
+		setTitle ( PocetniProzor.getInstance().getResourceBundle().getString("wizard.genericki"));
+		
+		setLocationRelativeTo(null);
+		setIconImage(new ImageIcon("slike/ikonica.png").getImage());
+
+		setVisible(true);
+		
+		/*
+		 * Promenjiva izvrsni ce nam govoriti da li je prozor pozvan iz izvrsnog rezima rada ili
+		 * administrativnog rezima rada
+		 * */
+		izvrsni=izvrsni1;
+		JTextArea textArea;
+		odredisniDirektorijum=odredisniDirekt;
+		
+		if(izvrsni)
+			textArea=new JTextArea(PocetniProzor.getInstance().getResourceBundle().getString("wizard.install"),2,2);
+		else
+			textArea=new JTextArea(PocetniProzor.getInstance().getResourceBundle().getString("wizard.pregled"),2,2);
+		 textArea.setEditable(false);
+		 textArea.setLineWrap(true);
+		 textArea.setBackground(new Color(215,183,188));
+		 add(textArea,BorderLayout.NORTH);
+		 
+		
+		 panel1= new JPanel();
+		 panel1.setSize(400,400);
+		 a=new JScrollPane(panel1);
+		 a.setSize(400, 400);
+		 BoxLayout box = new BoxLayout(panel1, BoxLayout.Y_AXIS);
+		 panel1.setLayout(box);
+		 panel1.setBackground(new Color(41, 41, 41));
+		 a.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		 a.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		 add(a);
+		
+		
+		 panBottom = new JPanel();
+		 BoxLayout box1 = new BoxLayout( panBottom , BoxLayout.X_AXIS);
+		 panBottom.setBackground(new Color(41, 41, 41));
+		 panBottom.setLayout(box1);
+	
+
+		 validate();
+		 setSize( 700 , 400 );
+		
+		
+	}
+
+	public JPanel getPanel1() {
+		return panel1;
+	}
+
+	public void setPanel1(JPanel panel1) {
+		this.panel1 = panel1;
+	}
+
+	public JPanel getPanBottom() {
+		return panBottom;
+	}
+
+	public void setPanBottom(JPanel panBottom) {
+		this.panBottom = panBottom;
+	}
+	
+	public void addSredisnjaDugmad(Proizvod proizvod1,int rbr){
+		proizvod=proizvod1;
+		listaWizarda=proizvod.getListaWizarda();
+		brojWizardaIzListe=rbr;
+		
+		JButton btnBack = new JButton(PocetniProzor.getInstance().getResourceBundle().getString("backOption"));
+		btnBack.setBackground(new Color(79, 84, 125));
+		btnBack.setPreferredSize(new Dimension ( 75,25));
+		if(izvrsni)
+			btnBack.addActionListener(new BackActionListener());
+		
+		JButton btnNext = new JButton(PocetniProzor.getInstance().getResourceBundle().getString("nextOption"));
+		btnNext.setBackground(new Color(79, 84, 125));
+		btnNext.setPreferredSize(new Dimension ( 75,25));
+		if(izvrsni)
+			btnNext.addActionListener(new NextActionListener());
+
+		
+		JButton btnCancel = new JButton ( PocetniProzor.getInstance().getResourceBundle().getString("cancelOption"));
+		btnCancel.setBackground(new Color(79, 84, 125));
+		btnCancel.setPreferredSize(new Dimension ( 75, 85));
+		if(izvrsni)
+			btnCancel.addActionListener(new CancelActionListener());
+
+		
+		
+		panBottom.add(Box.createGlue());
+		panBottom.add(btnBack);
+		panBottom.add(Box.createHorizontalStrut(10));
+		panBottom.add(btnNext);
+		panBottom.add(Box.createHorizontalStrut(10));
+		panBottom.add(btnCancel);
+		panBottom.add(Box.createHorizontalStrut(10));
+
+		
+		add(panBottom , BorderLayout.SOUTH);
+
+	}
+	
+	public void addPocetnaDugmad(Proizvod proizvod1){
+		proizvod=proizvod1;
+		listaWizarda=proizvod.getListaWizarda();
+		brojWizardaIzListe=0;
+		
+		JButton btnNext = new JButton( PocetniProzor.getInstance().getResourceBundle().getString("nextOption"));
+		btnNext.setBackground(new Color(79, 84, 125));
+		btnNext.setPreferredSize(new Dimension ( 75,25));
+		if(izvrsni)
+			btnNext.addActionListener(new NextActionListener());
+		
+		JButton btnCancel = new JButton (PocetniProzor.getInstance().getResourceBundle().getString("cancelOption") );
+		btnCancel.setBackground(new Color(79, 84, 125));
+		btnCancel.setPreferredSize(new Dimension ( 75, 85));
+		if(izvrsni)
+			btnCancel.addActionListener(new CancelActionListener());
+		
+		panBottom.add(Box.createGlue());
+		panBottom.add(Box.createHorizontalStrut(10));
+		panBottom.add(btnNext);
+		panBottom.add(Box.createHorizontalStrut(10));
+		panBottom.add(btnCancel);
+		panBottom.add(Box.createHorizontalStrut(10));
+
+		
+		add(panBottom , BorderLayout.SOUTH);
+
+	}
+	
+	
+	public void addKrajnjaDugmad(Proizvod proizvod1,int rbr){
+		proizvod=proizvod1;
+		listaWizarda=proizvod1.getListaWizarda();
+		brojWizardaIzListe=rbr;
+		
+		JButton btnBack = new JButton( "Back");
+		btnBack.setBackground(new Color(79, 84, 125));
+		btnBack.setPreferredSize(new Dimension ( 75,25));
+		if(izvrsni)
+			btnBack.addActionListener(new BackActionListener());
+		
+		JButton btnFinish = new JButton( "Finish");
+		btnFinish.setBackground(new Color(79, 84, 125));
+		btnFinish.setPreferredSize(new Dimension ( 75,25));
+		if(izvrsni)
+			btnFinish.addActionListener(new FinishActionListener());
+		
+		JButton btnCancel = new JButton ( "Cancel");
+		btnCancel.setBackground(new Color(79, 84, 125));
+		btnCancel.setPreferredSize(new Dimension ( 75, 85));
+		if(izvrsni)
+			btnCancel.addActionListener(new CancelActionListener());
+		
+		panBottom.add(Box.createGlue());
+		panBottom.add(btnBack);
+		panBottom.add(Box.createHorizontalStrut(10));
+		panBottom.add(btnFinish);
+		panBottom.add(Box.createHorizontalStrut(10));
+		panBottom.add(btnCancel);
+		panBottom.add(Box.createHorizontalStrut(10));
+
+		
+		add(panBottom , BorderLayout.SOUTH);
+
+	}
+	
+public void addDugmadZaJedanJediniWizard(Proizvod proizvod1){
+
+		proizvod=proizvod1;
+		listaWizarda=proizvod1.getListaWizarda();
+		
+		JButton btnFinish = new JButton(PocetniProzor.getInstance().getResourceBundle().getString("finistOption"));
+		btnFinish.setBackground(new Color(79, 84, 125));
+		btnFinish.setPreferredSize(new Dimension ( 75,25));
+		if(izvrsni)
+			btnFinish.addActionListener(new FinishActionListener());
+		
+		JButton btnCancel = new JButton ( PocetniProzor.getInstance().getResourceBundle().getString("cancelOption"));
+		btnCancel.setBackground(new Color(79, 84, 125));
+		btnCancel.setPreferredSize(new Dimension ( 75, 85));
+		if(izvrsni)
+			btnCancel.addActionListener(new CancelActionListener());
+		
+		panBottom.add(Box.createGlue());
+		panBottom.add(Box.createHorizontalStrut(10));
+		panBottom.add(btnFinish);
+		panBottom.add(Box.createHorizontalStrut(10));
+		panBottom.add(btnCancel);
+		panBottom.add(Box.createHorizontalStrut(10));
+
+		
+		add(panBottom , BorderLayout.SOUTH);
+
+	}
+	
+/* metoda za dodavanje jednolinijskog teksta u preview wizarda 
+ * 
+ * Poziva se  u metodi SelectionListener klase PocetniProzor*/
+public void addOneLineText(Object value,Boolean readOnly,Boolean vidljiv, Boolean obavezan){
+
+	
+	oneLineText = (JTextField) value;
+	oneLineText.setBackground(new Color(215,183,188));
+
+	if(readOnly)
+		oneLineText.setEditable(false);
+	
+	if(vidljiv)
+		panel1.add(oneLineText);
+		//add(panel1);
+
+	
+}
+
+/* metoda za dodavanje multilinijskog teksta u pewview wizarda
+ * 
+ * Poziva se u metodi SelectionListener klase PocetniProzor
+ * */
+
+public void addMultiLineText(Object value,Boolean readOnly, Boolean vidljiv, Boolean obavezan){
+	
+	multiLineText =(JTextArea) value;
+	multiLineText.setBackground(new Color(215,183,188));
+	multiLineText.setLineWrap(true);
+	
+	if(readOnly)
+		multiLineText.setEditable(false);
+	if(vidljiv)
+	panel1.add(multiLineText);
+	
+	//add(panel1);
+
+}
+
+/*metoda za dodavanje boolean chekboxa u preview wizarda
+ * 
+ * Poziva se u metodi SelectionListener klase PocetniProzor
+ * */
+
+public void addBoolean(Boolean vidljiv, Boolean readOnly, Boolean obavezan){
+	istina=new JCheckBox (PocetniProzor.getInstance().getResourceBundle().getString("yesOption"));
+    istina.setBackground(new Color(51, 51, 51));
+    istina.setForeground(Color.WHITE);
+    
+    pogresno=new JCheckBox (PocetniProzor.getInstance().getResourceBundle().getString("noOption"));
+    pogresno.setBackground(new Color(51, 51, 51));
+    pogresno.setForeground(Color.WHITE);
+    
+    
+    ButtonGroup btnGroup1=new ButtonGroup();
+    btnGroup1.add(istina);
+    btnGroup1.add(pogresno);
+    
+    if(readOnly) {
+    	istina.setEnabled(false);
+    	pogresno.setEnabled(false);
+    }
+    
+    if(vidljiv){
+    panel1.add(istina);
+    panel1.add(pogresno);
+    }
+
+	//add(panel1, BorderLayout.CENTER);
+
+}
+
+public void addFileChooser(Boolean vidljiv, Boolean obavezan,Boolean izvorisni){
+	txtValue = new JTextField();
+	txtValue.setPreferredSize(new Dimension (400, 35));
+	txtValue.setBackground(Color.WHITE);
+	
+	JPanel panValue = new JPanel();
+	JButton btnBrowse = new JButton(PocetniProzor.getInstance().getResourceBundle().getString("wizard.browse"));
+	btnBrowse.setPreferredSize(new Dimension(75,25));
+	btnBrowse.setBackground(new Color(79, 84, 125));
+	if(izvrsni)
+		btnBrowse.addActionListener(new BrowseActionListenerFileChooser());
+	panValue.setBackground(new Color(51, 51, 51));
+	FlowLayout fl1=new FlowLayout(FlowLayout.RIGHT);
+	panValue.setLayout(fl1);
+	JLabel lblValue;
+	if(izvorisni)
+		lblValue = new JLabel(PocetniProzor.getInstance().getResourceBundle().getString("dodatno.izaberiteod"));
+	else
+		lblValue = new JLabel( PocetniProzor.getInstance().getResourceBundle().getString("wizard.file_choose"));
+	izvorisni1=izvorisni;
+	
+	lblValue.setForeground(Color.WHITE);
+	lblValue.setPreferredSize(new Dimension ( 200, 35 ));
+	
+	panValue.add(lblValue);
+	panValue.add(txtValue);
+	panValue.add(btnBrowse);
+	
+	panel1.add(panValue);
+	panel1.add(Box.createVerticalStrut(15));
+	//add(panel1, BorderLayout.CENTER);
+	
+	
+}
+
+/*metoda za dodavanje slike u preview wizarda
+ * 
+ * Poziva se u metodi SelectionListener klase PocetniProzor
+ * */
+public void addImage(Object value, Boolean vidljiv,Boolean promenjiv, Boolean obavezan){
+	ImageIcon imageIcon =(ImageIcon) value;
+	imgLabel = new JLabel();
+	imgLabel.setIcon(imageIcon);
+	
+	if(vidljiv)
+		panel1.add(imgLabel);
+	
+	if(promenjiv){
+		
+		txtValue = new JTextField();
+		txtValue.setPreferredSize(new Dimension (400, 35));
+		txtValue.setBackground(new Color(255, 217, 179));
+		JPanel panValue = new JPanel();
+		JButton btnBrowse = new JButton(PocetniProzor.getInstance().getResourceBundle().getString("wizard.browse"));
+		btnBrowse.setPreferredSize(new Dimension(75,25));
+		btnBrowse.setBackground(new Color(255, 140, 26));
+		if(izvrsni)
+			btnBrowse.addActionListener(new BrowseActionListenerImage());
+		panValue.setBackground(new Color(51, 51, 51));
+		FlowLayout fl1=new FlowLayout(FlowLayout.RIGHT);
+		panValue.setLayout(fl1);
+		JLabel lblValue = new JLabel(PocetniProzor.getInstance().getResourceBundle().getString("wizard.izmena_slike"));
+		lblValue.setForeground(Color.WHITE);
+		lblValue.setPreferredSize(new Dimension ( 100, 35 ));
+		
+		panValue.add(lblValue);
+		panValue.add(txtValue);
+		panValue.add(btnBrowse);
+		
+		panel1.add(panValue);	
+	}
+
+	
+	//add(panel1);
+}
+
+
+	public class CancelActionListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			setVisible(false);	
+		}
+	}
+	
+	public class NextActionListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			
+			int greska1=Testiranje();
+				if(greska1==0) {
+					brojWizardaIzListe++;		
+					setVisible(false);
+			
+					gw= new GenerickiWizard(true,odredisniDirektorijum);
+					if(brojWizardaIzListe+1 == listaWizarda.size())
+						gw.addKrajnjaDugmad(proizvod,brojWizardaIzListe);
+					else
+						gw.addSredisnjaDugmad(proizvod,brojWizardaIzListe);
+
+					IzgenerisiProzor();	
+				}
+			}
+		}
+	
+	public class BackActionListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			brojWizardaIzListe--;
+			setVisible(false);
+			
+			gw= new GenerickiWizard(true,odredisniDirektorijum);
+			if(brojWizardaIzListe == 0)
+				gw.addPocetnaDugmad(proizvod);
+			else
+				gw.addSredisnjaDugmad(proizvod,brojWizardaIzListe);
+			IzgenerisiProzor();
+			
+				
+		}
+	}
+	
+	public class BrowseActionListenerFileChooser implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			browse = new JFileChooser();
+			if(izvorisni1)
+			    browse.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+			int dijalog = browse.showOpenDialog(null);		
+			if(dijalog == JFileChooser.APPROVE_OPTION) {
+				txtValue.setText(browse.getSelectedFile().getAbsolutePath());
+			//	if(izvorisni1)
+		//			proizvod.setOdredisnaAdresa(browse.getSelectedFile().getAbsolutePath());
+			}						
+		}
+	}
+	
+	public class BrowseActionListenerImage implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			browse = new JFileChooser();
+			filter = new FileNameExtensionFilter("Images","jpg", "jpeg", "png");
+			browse.setFileFilter(filter);
+			int dijalog = browse.showOpenDialog(null);
+			
+			if(dijalog == JFileChooser.APPROVE_OPTION) {
+				put = browse.getSelectedFile().getAbsolutePath();
+				txtValue.setText(put);
+				
+				BufferedImage slika = null;
+				try {
+				    slika = ImageIO.read(new File(put));
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog(null, PocetniProzor.getInstance().getResourceBundle().getString("image.putanja"),PocetniProzor.getInstance().getResourceBundle().getString("proizvod.error"), JOptionPane.ERROR_MESSAGE);
+				}
+				
+				slika_smanjena = slika.getScaledInstance(200, 200,Image.SCALE_SMOOTH);
+				ImageIcon imageIcon = new ImageIcon(slika_smanjena);
+				imgLabel.setIcon(imageIcon);
+			}			
+		}
+	}
+	
+	
+	public class FinishActionListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			
+			int greska1=Testiranje();
+			
+			if(greska1==0) {
+			String izvorniDirektorijum=proizvod.getIzvornaAdresa();
+			File izvorni = new File(izvorniDirektorijum);
+			try {
+				FileUtils.copyDirectory(izvorni,odredisniDirektorijum);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			JOptionPane.showMessageDialog(null,"Uspesna instalacija!","Universtalator", JOptionPane.INFORMATION_MESSAGE);
+
+			setVisible(false);	
+		}
+		}
+	}
+	
+
+	
+	private void IzgenerisiProzor(){
+		
+		
+		Wizard sredisnjiWizard = listaWizarda.get(brojWizardaIzListe);
+		
+		List<Parametar> parametri =sredisnjiWizard.getParametri();
+		for(int i=0; i<parametri.size();i++){
+			Parametar parametar1=parametri.get(i);
+			System.out.println("TIP PARAMETRA je "+ parametar1.getData_type());
+			if(parametar1.getData_type().equals("Image")){
+				gw.addImage(parametar1.getValue(),parametar1.getVidljiv(),parametar1.getChangeable(), parametar1.getObavezan());
+			}
+			else if(parametar1.getData_type().equals("One Line Text")){
+				gw.addOneLineText(parametar1.getValue(),parametar1.getReadOnly(),parametar1.getVidljiv(), parametar1.getObavezan());
+			}
+			else if(parametar1.getData_type().equals("Multiple Line Text")){
+				gw.addMultiLineText(parametar1.getValue(),parametar1.getReadOnly(),parametar1.getVidljiv(), parametar1.getObavezan());
+			}
+			else if(parametar1.getData_type().equals("Boolean")){
+				gw.addBoolean(parametar1.getVidljiv(), parametar1.getReadOnly(), parametar1.getObavezan());
+			}
+			else if(parametar1.getData_type().equals("File Chooser")){
+				gw.addFileChooser(parametar1.getVidljiv(), parametar1.getObavezan(),false);
+			}else{
+				gw.addFileChooser(parametar1.getVidljiv(), parametar1.getObavezan(),true);
+			}
+		}
+	}
+	
+private int Testiranje() {
+	
+	int greska=0;
+	Wizard sredisnjiWizard = listaWizarda.get(brojWizardaIzListe);
+	List<Parametar> parametri =sredisnjiWizard.getParametri();
+		for(int i=0; i<parametri.size(); i++){
+			Parametar parametar1=parametri.get(i);
+			
+			if (parametar1.getObavezan()) {
+					if((parametar1.getData_type().equals("Image") || parametar1.getData_type().equals("File Chooser") || parametar1.getData_type().equals("Izvorni"))){
+						f = new File(txtValue.getText());
+				
+						if(!(txtValue.getText()!=null && !txtValue.getText().isEmpty())) {
+							JOptionPane.showMessageDialog(null, PocetniProzor.getInstance().getResourceBundle().getString("image.parametar"), PocetniProzor.getInstance().getResourceBundle().getString("proizvod.error"), JOptionPane.ERROR_MESSAGE);
+							greska=1;
+						}
+						else if(!(f.exists())) {
+							JOptionPane.showMessageDialog(null, PocetniProzor.getInstance().getResourceBundle().getString("wizard.putanja"), PocetniProzor.getInstance().getResourceBundle().getString("proizvod.error"), JOptionPane.ERROR_MESSAGE);
+							greska=1;
+						}
+					}
+					if(parametar1.getData_type().equals("Izvorni"))
+						odredisniDirektorijum=f;
+			
+					if(parametar1.getData_type().equals("One Line Text")) {
+						if(!(oneLineText.getText()!=null && !oneLineText.getText().isEmpty())) {
+							JOptionPane.showMessageDialog(null, PocetniProzor.getInstance().getResourceBundle().getString("image.parametar"), PocetniProzor.getInstance().getResourceBundle().getString("proizvod.error"), JOptionPane.ERROR_MESSAGE);
+							greska=1;
+						}
+					}
+			 
+					if(parametar1.getData_type().equals("Multiple Line Text")) {
+						if(!(multiLineText.getText()!=null && !multiLineText.getText().isEmpty())) {
+							JOptionPane.showMessageDialog(null, PocetniProzor.getInstance().getResourceBundle().getString("image.parametar"), PocetniProzor.getInstance().getResourceBundle().getString("proizvod.error"), JOptionPane.ERROR_MESSAGE);
+							greska=1;
+						}
+					}
+			
+					if(parametar1.getData_type().equals("Boolean")){
+						if(!(istina.isSelected() || pogresno.isSelected())) {
+							JOptionPane.showMessageDialog(null, PocetniProzor.getInstance().getResourceBundle().getString("wizard.odabir_parametra"), PocetniProzor.getInstance().getResourceBundle().getString("proizvod.error"), JOptionPane.ERROR_MESSAGE);
+							greska=1;
+						}
+					}
+				}
+			}
+		return greska;
+	}
+		
+}

@@ -1,0 +1,125 @@
+
+backOption = Arri\u00E8re
+
+cancelOption = Annuler
+
+dodatno.browse           = Parcourir
+dodatno.carobni          = Assistant
+dodatno.created          = Assistant cr\u00E9\u00E9
+dodatno.delete           = Effacer\r\n
+dodatno.edit             = Modifier\r\n
+dodatno.izaberidirektivu = Choisissez un r\u00E9pertoire:
+dodatno.izaberiteod      = Choisissez une destination
+dodatno.izmena           = Changer le produit
+dodatno.kreiranje        = Cr\u00E9er un produit
+dodatno.kwizard          = Cr\u00E9er un nouveau produit
+dodatno.newparam         = Nouveau param\u00E8tre
+dodatno.newprod          = Nouveau produit\r\n
+dodatno.newwiz           = Nouveau magicien
+dodatno.nparametar       = Entrez un nouveau param\u00E8tre
+dodatno.onelinetext      = Entr\u00E9e de texte \u00E0 une ligne
+dodatno.opened           = Ouvert le programme principal
+dodatno.parametar        = Entrer un param\u00E8tre
+dodatno.proizvod         = Des produits
+dodatno.save             = Sauvegarder
+dodatno.savenijesave     = Vous ne pouvez pas enregistrer un produit qui n'en poss\u00E8de pas ou a plus d'un param\u00E8tre pour s\u00E9lectionner le r\u00E9pertoire de destination
+dodatno.staradisbre      = Le type s\u00E9lectionn\u00E9 requiert que seule la lecture ne soit pas s\u00E9lectionn\u00E9e et les champs doivent \u00EAtre obligatoires et visibles.
+dodatno.unbeliavable     = Comment est-il possible que ces deux sont les m\u00EAmes?
+dodatno.unesitedesti     = Entrez la destination du r\u00E9pertoire source
+dodatno.unesitezeljenu   = Entrez un chemin existant vers le fichier d\u00E9sir\u00E9
+dodatno.uspesno          = Ouvert avec succ\u00E8s
+dodatno.valuee           = Valeur:\r\n
+
+file = fichier
+
+finistOption = Terminer
+
+image.naslov    = Entr\u00E9e d'image
+image.parametar = Entrez les valeurs des param\u00E8tres
+image.putanja   = Entrez un chemin existant vers l'image souhait\u00E9e
+image.value     = Valeur
+
+izvrsni.browse          = Feuilleter\r\n
+izvrsni.naslov          = Ex\u00E9cuter une installation
+izvrsni.postojecu       = Entrez un chemin existant vers le produit souhait\u00E9.
+izvrsni.putanja         = Chemin:
+izvrsni.unesite_putanju = Entrez le chemin d'acc\u00E8s au produit.
+
+menu.file               = Fichier
+menu.file.delete        = Effacer
+menu.file.edit          = Modifier
+menu.file.exit          = Sortie
+menu.file.new           = Nouveau
+menu.file.new.parametar = Fen\u00EAtre pour les param\u00E8tres d'entr\u00E9e
+menu.file.new.wizard    = Assistant de saisie:\r\n
+menu.file.open          = Ouvrir
+menu.file.save          = Sauvegarder
+menu.help               = Aidez-moi
+menu.help.about         = Sur..\r\n
+menu.help.about.prozor  = \u00C0 propos d'universtalator
+menu.language           = La langue
+menu.language.engleski  = Anglais\r\n
+menu.language.francuski = fran\u00E7ais
+menu.language.japanski  = Japonais
+menu.language.srpski    = Serbe
+menu.open               = Ouvrir
+
+nextOption = Prochain
+
+noOption = Non
+
+okOption = D'accord
+
+openaction.fajl     = Fichier non trouv\u00E9
+openaction.greska   = Erreur d'ouverture
+openaction.klasa    = Classe non trouv\u00E9e
+openaction.otvoreno = Ouvert avec succ\u00E8s
+
+parametar.box.obavezan  = Est-ce obligatoire?
+parametar.box.vidljiv   = Est-ce visible?
+parametar.btn.promenjiv = Variable
+parametar.btn.read_only = Lecture seulement\r\n
+parametar.ime           = Le nom du param\u00E8tre:\r\n
+parametar.naslov        = Fen\u00EAtre de saisie des param\u00E8tres
+parametar.naziv         = Entrez le nom du param\u00E8tre
+parametar.nemozes       = Vous ne pouvez pas ins\u00E9rer un param\u00E8tre dans ce n\u0153ud!
+parametar.obavezni      = Seuls les param\u00E8tres de lecture ne peuvent pas \u00EAtre requis.
+parametar.odabir        = Indiquez si le type de donn\u00E9es est modifiable ou en lecture seule.
+parametar.postojeci     = Un param\u00E8tre avec un tel nom existe d\u00E9j\u00E0, attribuez un autre nom au param\u00E8tre
+parametar.tip           = D\u00E9finir le type de param\u00E8tre souhait\u00E9
+
+proizvod.error        = Erreur
+proizvod.error.poruka = Entrez le nom du produit
+proizvod.ime          = Nom:
+proizvod.naslov       = Panneau de saisie du produit
+proizvod.ne_postojeci = Vous ne pouvez pas ins\u00E9rer le produit dans ce noeud!
+proizvod.postojeci    = un produit avec un tel nom existe d\u00E9j\u00E0, donnez un nom diff\u00E9rent au produit.
+proizvod.select       = S\u00E9lectionnez la cat\u00E9gorie dans l'arbre
+
+saveaction.choice           = Vous avez choisi d'ouvrir ce fichier:
+saveaction.greska           = Erreur lors de l'enregistrement du produit
+saveaction.greska_workspace = Erreur lors de l'enregistrement d'un espace de travail
+saveaction.putanja          = Le chemin n'a pas \u00E9t\u00E9 trouv\u00E9
+saveaction.select           = S\u00E9lectionnez les produits ou les espaces de travail que vous souhaitez enregistrer!
+saveaction.snimljen         = Produit enregistr\u00E9 avec succ\u00E8s
+saveaction.uspesno          = Espace de travail enregistr\u00E9 avec succ\u00E8s
+
+wizard = Vous ne pouvez pas changer l'assistant!
+
+wizard.about            = Sur Universtalator
+wizard.browse           = Feuilleter\r\n
+wizard.cvor             = Vous ne pouvez pas ins\u00E9rer l'assistant dans ce noeud!
+wizard.file_choose      = Choisir le fichier:\r\n
+wizard.genericki        = Un assistant g\u00E9n\u00E9rique
+wizard.install          = Installation
+wizard.izmena_slike     = Modifier l'image:
+wizard.multi            = Entr\u00E9e de texte multiligne
+wizard.nothinghappen    = Rien ne s'est pass\u00E9
+wizard.odabir_parametra = S\u00E9lectionnez la valeur du param\u00E8tre
+wizard.pregled          = Aper\u00E7u
+wizard.putanja          = Entrez un chemin existant vers le fichier d\u00E9sir\u00E9
+wizard.succesful        = L'installation est r\u00E9ussie!
+wizard.textarea         = UNIVERSTALATOR v1.0 2017 Universtalator \r\nTous droits r\u00E9serv\u00E9s \r\nAuteurs: \r\nAleksandar Stani\u0107, Marko Kati\u0107, Branislav Leti\u0107 et Igor Lovri\u0107.
+wizard.zatvaranje       = \u00CAtes-vous s\u00FBr de vouloir fermer l'application?
+
+yesOption = Oui\r\n
